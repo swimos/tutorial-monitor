@@ -1,0 +1,53 @@
+buildscript { repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceCompatibility = JavaVersion.VERSION_11
+targetCompatibility = JavaVersion.VERSION_11
+
+
+group = 'swim'
+description = 'Swim Machine Monitoring Application'
+version = project.property('application.version')
+mainClassName = 'swim.monitor.SwimMonitorPlane'
+ext.swimVersion = project.property('swim.version')
+ext.moduleName = 'swim.monitor'
+ext.moduleArgs = []
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation group: 'org.swimos', name: 'swim-server', version: swimVersion
+    implementation group: 'org.swimos', name: 'swim-client', version: swimVersion
+    implementation group: 'org.swimos', name:'swim-meta', version: swimVersion
+    implementation 'com.github.oshi:oshi-core:6.1.6'
+}
+
+task runClient(type: JavaExec) {
+    group = "application"
+    classpath sourceSets.main.runtimeClasspath
+    mainClass = 'swim.monitor.client.SwimMonitorClient'
+    systemProperties = System.getProperties()
+}
+
+task createClientApp(type: CreateStartScripts) {
+    mainClass = 'swim.monitor.client.SwimMonitorClient'
+    classpath = startScripts.classpath
+    outputDir = startScripts.outputDir
+    applicationName = 'swim-monitor-client'
+    defaultJvmOpts = ["-Dhost=warps://monitor.swim.services", "-Dcluster=cloud"]
+}
+
+applicationDistribution.into("bin") {
+    duplicatesStrategy= DuplicatesStrategy.EXCLUDE
+    from(createClientApp)
+    fileMode = 0755
+}

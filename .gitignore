@@ -1,0 +1,17 @@
+.gitconfig
+
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+build
+
+# Ignore bin directory
+bin
+
+# Ignore Mac stuff
+.DS_Store
+
+# Ignore emacs stuff
+*~
+#*
