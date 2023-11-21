@@ -68,4 +68,4 @@ swim-cli sync -h warp://localhost:9001 -n /cluster/abc -l statusHistory
 
 ## Running the UI
 
-Now, under the `/ui` folder under project root, open `index.html` as a local file in your web browser to see results from monitoring your locate machine populate a chart.
+Now, you can view the UI by appending `/ui` to the host address using the HTTP or HTTPS protocol, such as `http://localhost:9001/ui`.
